@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import Todo from './TodoList';
 
 const App = () => {
 	const stories = [
@@ -41,6 +42,10 @@ const App = () => {
 		setSearchTerm(event.target.value);
 	};
 
+	const handleClick = (event) => {
+		setSearchTerm('');
+	};
+
 	const searchedStories = stories.filter((story) =>
 		story.title.toLowerCase().includes(searchTerm.toLowerCase())
 	);
@@ -52,17 +57,21 @@ const App = () => {
 			<Search
 				onSearch={handleSearch}
 				search={searchTerm}
+				// button={handleClick}
+				set={setSearchTerm}
 			/>
 
 			<hr />
 
 			<List list={searchedStories} />
+
+			<Todo />
 		</div>
 	);
 };
 
 const Search = (props) => {
-	const { search, onSearch } = props;
+	const { search, onSearch, button, set } = props;
 	return (
 		<div>
 			<label htmlFor="search">Search: </label>
@@ -72,6 +81,7 @@ const Search = (props) => {
 				value={search}
 				onChange={onSearch}
 			/>
+			<Button set={set} />
 
 			<p>
 				Searching for <strong>{props.search}</strong>.
@@ -101,5 +111,18 @@ const Item = ({ item }) => (
 		<span>{item.points}</span>
 	</li>
 );
+
+const Button = (props) => {
+	return (
+		<button
+			type="button"
+			onClick={(event) => {
+				props.set('');
+			}}
+		>
+			Clear Search
+		</button>
+	);
+};
 
 export default App;
