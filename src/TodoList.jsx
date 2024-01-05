@@ -18,9 +18,14 @@ const Todo = () => {
 	};
 
 	const handleAddTask = (event) => {
-		setItem(item.push(task));
-		localStorage.setItem('mylist', JSON.stringify(item));
+		const updatedItems = [...item, task]; // Create a new array with the updated task
+		setItem(updatedItems); // Update the state with the new array
+		localStorage.setItem('mylist', JSON.stringify(updatedItems));
+		console.log(updatedItems);
 	};
+
+	const myNewListString = localStorage.getItem('mylist');
+	const myNewList = JSON.parse(myNewListString);
 
 	return (
 		<>
@@ -39,6 +44,16 @@ const Todo = () => {
 			>
 				Add task
 			</button>
+
+			<hr />
+
+			<ul>
+				{
+					<ul>
+						{myNewList && myNewList.map((item, index) => <li key={index}>{item}</li>)}
+					</ul>
+				}
+			</ul>
 		</>
 	);
 };
