@@ -59,7 +59,7 @@ const Todo = () => {
 					myNewList.map((item, index) => (
 						<li key={index}>
 							{item} &nbsp;
-							<button onClick={() => handleDone(index)}>-</button>
+							<button onClick={() => handleDone(index)}>🎯</button>
 						</li>
 					))}
 			</ul>
