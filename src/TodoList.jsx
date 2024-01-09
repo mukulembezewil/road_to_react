@@ -8,7 +8,8 @@ const Todo = () => {
 	const [item, setItem] = useState([]);
 
 	useEffect(() => {
-		const newList = JSON.parse(localStorage.getItem('mylist')); // I've retrieved list and parsed it to array
+		const myNewListString = localStorage.getItem('mylist');
+		const newList = myNewListString ? JSON.parse(myNewListString) : []; // Initialize as an empty array if null
 		newList.push(task);
 		localStorage.setItem('mylist', JSON.stringify(newList));
 	}, [task]);
@@ -48,11 +49,7 @@ const Todo = () => {
 			<hr />
 
 			<ul>
-				{
-					<ul>
-						{myNewList && myNewList.map((item, index) => <li key={index}>{item}</li>)}
-					</ul>
-				}
+				{myNewList && myNewList.map((item, index) => <li key={index}>{item}</li>)}
 			</ul>
 		</>
 	);
