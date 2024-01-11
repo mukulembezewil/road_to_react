@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Todo from './TodoList';
 import OptionButt from './OptionButt';
+import Checkboxes from './Checkboxes';
 
 const App = () => {
 	const stories = [
@@ -68,7 +69,10 @@ const App = () => {
 			<List list={searchedStories} />
 
 			<Todo />
+
 			<OptionButt />
+
+			<Checkboxes />
 		</div>
 	);
 };
