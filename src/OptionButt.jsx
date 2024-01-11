@@ -46,6 +46,7 @@ const RadioButt = () => {
 	);
 };
 
+// eslint-disable-next-line react/prop-types
 const Group = ({ label, value, onChange }) => {
 	return (
 		<>
