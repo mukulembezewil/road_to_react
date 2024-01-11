@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Todo from './TodoList';
 import OptionButt from './OptionButt';
 import Checkboxes from './Checkboxes';
+import Dropdown from './Dropdown';
 
 const App = () => {
 	const stories = [
@@ -73,6 +74,8 @@ const App = () => {
 			<OptionButt />
 
 			<Checkboxes />
+
+			<Dropdown />
 		</div>
 	);
 };
