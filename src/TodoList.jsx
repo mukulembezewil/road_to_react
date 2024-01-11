@@ -1,4 +1,4 @@
-import * as React from 'react';
+// import * as React from 'react';
 import { useState, useEffect } from 'react';
 
 const Todo = () => {
@@ -16,7 +16,7 @@ const Todo = () => {
 		setTask(event.target.value);
 	};
 
-	const handleAddTask = (event) => {
+	const handleAddTask = () => {
 		const updatedItems = [...item, task];
 		setItem(updatedItems);
 		localStorage.setItem('mylist', JSON.stringify(updatedItems));
