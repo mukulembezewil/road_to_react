@@ -1,4 +1,5 @@
-import * as React from 'react';
+/* eslint-disable react/prop-types */
+// import * as React from 'react';
 import { useState, useEffect } from 'react';
 import Todo from './TodoList';
 import OptionButt from './OptionButt';
@@ -43,9 +44,9 @@ const App = () => {
 		setSearchTerm(event.target.value);
 	};
 
-	const handleClick = (event) => {
-		setSearchTerm('');
-	};
+	// const handleClick = (event) => {
+	// 	setSearchTerm('');
+	// };
 
 	const searchedStories = stories.filter((story) =>
 		story.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -73,7 +74,7 @@ const App = () => {
 };
 
 const Search = (props) => {
-	const { search, onSearch, button, set } = props;
+	const { search, onSearch, set } = props;
 	return (
 		<div>
 			<label htmlFor="search">Search: </label>
@@ -118,7 +119,7 @@ const Button = (props) => {
 	return (
 		<button
 			type="button"
-			onClick={(event) => {
+			onClick={() => {
 				props.set('');
 			}}
 		>
