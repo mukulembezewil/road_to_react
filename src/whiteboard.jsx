@@ -11,7 +11,7 @@ const initialStories = [
 	},
 	{
 		title: 'Redux',
-		url: 'https://redux.js.org/',
+		url: 'https://redux.js.org',
 		author: 'Governor Oz',
 		num_comments: 2,
 		points: 5,
@@ -19,7 +19,7 @@ const initialStories = [
 	},
 	{
 		title: 'Router',
-		url: 'https://reactrouter.dev',
+		url: 'http://reactrouter.dev',
 		author: 'The dad',
 		num_comments: 7,
 		points: 14,
@@ -39,11 +39,6 @@ const useStorageState = (key, initialState) => {
 	const [value, setValue] = React.useState(
 		localStorage.getItem(key) || initialState
 	);
-
-	React.useEffect(() => {
-		localStorage.setItem(key, value);
-	}, [value, key]);
-
 	return [value, setValue];
 };
 
@@ -56,7 +51,6 @@ const App = () => {
 		const newStories = stories.filter(
 			(story) => item.objectID !== story.objectID
 		);
-
 		setStories(newStories);
 	};
 
@@ -70,7 +64,7 @@ const App = () => {
 
 	return (
 		<div>
-			<h1>My Hacker Stories</h1>
+			<h1>My Leading Stories</h1>
 
 			<InputWithLabel
 				id="search"
@@ -116,7 +110,7 @@ const InputWithLabel = ({
 				id={id}
 				type={type}
 				value={value}
-				onChange={onInputChange}
+				onchange={onInputChange}
 			/>
 		</>
 	);
@@ -136,23 +130,18 @@ const List = ({ list, onRemoveItem }) => (
 
 const Item = ({ item, onRemoveItem }) => (
 	<li>
-		<span>{item.title}</span>
 		<span>
 			<a href={item.url}></a>
 		</span>
-		&nbsp;
 		<span>{item.author}</span>
-		&nbsp;
 		<span>{item.num_comments}</span>
-		&nbsp;
 		<span>{item.points}</span>
-		&nbsp; &nbsp; &nbsp;
 		<span>
 			<button
 				type="button"
 				onClick={() => onRemoveItem(item)}
 			>
-				⛔
+				Dismiss
 			</button>
 		</span>
 	</li>
