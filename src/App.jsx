@@ -11,20 +11,21 @@ const initialStories = [
 	},
 	{
 		title: 'Redux',
-		url: 'https://redux.js.org/',
-		author: 'Governor Oz',
-		num_comments: 2,
-		points: 5,
+		url: 'https://redux.js.org',
+		author: 'Governor Oz Luke M',
+		num_comments: 12,
+		points: 4.5,
 		objectID: 1,
 	},
 	{
 		title: 'Router',
 		url: 'https://reactrouter.dev',
 		author: 'The dad',
-		num_comments: 7,
-		points: 14,
+		num_comments: 16,
+		points: 9,
 		objectID: 2,
 	},
+
 	{
 		title: 'React Chart',
 		url: 'https://reactchart.dev',
@@ -34,6 +35,11 @@ const initialStories = [
 		objectID: 3,
 	},
 ];
+
+const getAsyncStories = () =>
+	new Promise((resolve) =>
+		setTimeout(() => resolve({ data: { stories: initialStories } }), 2000)
+	);
 
 const useStorageState = (key, initialState) => {
 	const [value, setValue] = React.useState(
@@ -50,7 +56,13 @@ const useStorageState = (key, initialState) => {
 const App = () => {
 	const [searchTerm, setSearchTerm] = useStorageState('search', 'React');
 
-	const [stories, setStories] = React.useState(initialStories);
+	const [stories, setStories] = React.useState([]);
+
+	React.useEffect(() => {
+		getAsyncStories().then((result) => {
+			setStories(result.data.stories);
+		});
+	}, []);
 
 	const handleRemoveStory = (item) => {
 		const newStories = stories.filter(
@@ -102,7 +114,7 @@ const InputWithLabel = ({
 	const inputRef = React.useRef();
 
 	React.useEffect(() => {
-		if (isFocused ** inputRef.current) {
+		if (isFocused && inputRef.current) {
 			inputRef.current.focus();
 		}
 	}, [isFocused]);
@@ -136,23 +148,19 @@ const List = ({ list, onRemoveItem }) => (
 
 const Item = ({ item, onRemoveItem }) => (
 	<li>
-		<span>{item.title}</span>
 		<span>
-			<a href={item.url}></a>
-		</span>
+			<a href={item.url}>{item.title}</a>
+		</span>{' '}
 		&nbsp;
-		<span>{item.author}</span>
-		&nbsp;
-		<span>{item.num_comments}</span>
-		&nbsp;
-		<span>{item.points}</span>
-		&nbsp; &nbsp; &nbsp;
+		<span>{item.author}</span> &nbsp;
+		<span>{item.num_comments}</span> &nbsp;
+		<span>{item.points}</span> &nbsp;
 		<span>
 			<button
 				type="button"
 				onClick={() => onRemoveItem(item)}
 			>
-				⛔
+				Dismiss
 			</button>
 		</span>
 	</li>
