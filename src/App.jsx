@@ -67,7 +67,6 @@ const App = () => {
 		getAsyncStories()
 			.then((result) => {
 				setStories(result.data.stories);
-
 				setIsLoading(false);
 			})
 			.catch(() => setIsError(true));
@@ -104,10 +103,10 @@ const App = () => {
 
 			<hr />
 
-			{isError && <p>Something went wrong...</p>}
+			{isError && <p>Something went wrong ...</p>}
 
 			{isLoading ? (
-				<p>Loading...</p>
+				<p>Loading ...</p>
 			) : (
 				<List
 					list={searchedStories}
@@ -115,6 +114,7 @@ const App = () => {
 				/>
 			)}
 
+			<hr />
 			<Appee />
 		</div>
 	);
@@ -167,11 +167,10 @@ const Item = ({ item, onRemoveItem }) => (
 	<li>
 		<span>
 			<a href={item.url}>{item.title}</a>
-		</span>{' '}
-		&nbsp;
-		<span>{item.author}</span> &nbsp;
-		<span>{item.num_comments}</span> &nbsp;
-		<span>{item.points}</span> &nbsp;
+		</span>
+		<span>{item.author}</span>
+		<span>{item.num_comments}</span>
+		<span>{item.points}</span>
 		<span>
 			<button
 				type="button"
