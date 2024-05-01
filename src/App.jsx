@@ -1,53 +1,27 @@
 import * as React from 'react';
 import Appee from '../../blackboard';
 
-const initialStories = [
-	{
-		title: 'React',
-		url: 'https://reactjs.org',
-		author: 'Amy M.',
-		num_comments: 3,
-		points: 4,
-		objectID: 0,
-	},
-	{
-		title: 'Redux',
-		url: 'https://redux.js.org',
-		author: 'Governor Oz Luke M',
-		num_comments: 12,
-		points: 4.5,
-		objectID: 1,
-	},
-	{
-		title: 'Router',
-		url: 'https://reactrouter.dev',
-		author: 'The dad',
-		num_comments: 16,
-		points: 9,
-		objectID: 2,
-	},
-
-	{
-		title: 'React Chart',
-		url: 'https://reactchart.dev',
-		author: 'The Neighbor',
-		num_comments: 9,
-		points: 29,
-		objectID: 3,
-	},
-];
-
-const getAsyncStories = () =>
-	new Promise((resolve) =>
-		setTimeout(() => resolve({ data: { stories: initialStories } }), 2000)
-	);
+const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query='; // First the API_ENDPOINT (A) is used to fetch popular tech stories for a certain query (a search term.)
 
 const storiesReducer = (state, action) => {
 	switch (action.type) {
-		case 'SET_STORIES':
-			return action.payload;
+		case 'STORIES_FETCH_INIT':
+			return {
+				...state,
+				isLoading: true,
+				isError: false,
+			};
+		case 'STORIES_FETCH_SUCCESS':
+			return { ...state, isLoading: false, isError: false, data: action.payload };
+		case 'STORIES_FETCH_FAILURE':
+			return { ...state, isLoading: false, isError: true };
 		case 'REMOVE_STORY':
-			return state.filter((story) => action.payload.objectID !== story.objectID);
+			return {
+				...state,
+				data: state.data.filter(
+					(story) => action.payload.objectID !== story.objectID
+				),
+			};
 		default:
 			throw new Error();
 	}
@@ -68,23 +42,24 @@ const useStorageState = (key, initialState) => {
 const App = () => {
 	const [searchTerm, setSearchTerm] = useStorageState('search', 'React');
 
-	const [stories, dispatchStories] = React.useReducer(storiesReducer, []);
-
-	const [isLoading, setIsLoading] = React.useState(false);
-	const [isError, setIsError] = React.useState(false);
+	const [stories, dispatchStories] = React.useReducer(storiesReducer, {
+		data: [],
+		isLoading: false,
+		isError: false,
+	});
 
 	React.useEffect(() => {
-		setIsLoading(true);
+		dispatchStories({ type: 'STORIES_FETCH_INIT' });
 
-		getAsyncStories()
+		fetch(`${API_ENDPOINT}react`) // (B) In this case we fetch stories about react using the native browser's fetch API to make this request.
+			.then((response) => response.json()) // (C) for the fetch API, the response needs to be translated into JSON.
 			.then((result) => {
 				dispatchStories({
-					type: 'SET_STORIES',
-					payload: result.data.stories,
+					type: 'STORIES_FETCH_SUCCESS',
+					payload: result.hits, // (D) finally, the returned result has a different structure that we send as payload to our component's state reducer.
 				});
-				setIsLoading(false);
 			})
-			.catch(() => setIsError(true));
+			.catch(() => dispatchStories({ type: 'STORIES_FETCH_FAILURE' }));
 	}, []);
 
 	const handleRemoveStory = (item) => {
@@ -107,7 +82,7 @@ const App = () => {
 		setSearchTerm(event.target.value);
 	};
 
-	const searchedStories = stories.filter((story) =>
+	const searchedStories = stories.data.filter((story) =>
 		story.title.toLowerCase().includes(searchTerm.toLowerCase())
 	);
 
@@ -126,9 +101,9 @@ const App = () => {
 
 			<hr />
 
-			{isError && <p>Something went wrong ...</p>}
+			{stories.isError && <p>Something went wrong ...</p>}
 
-			{isLoading ? (
+			{stories.isLoading ? (
 				<p>Loading ...</p>
 			) : (
 				<List
